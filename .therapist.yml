@@ -1,0 +1,24 @@
+actions:
+  black:
+    run: black --check --diff {files}
+    fix: black {files}
+    include: "*.py"
+
+  flake8:
+    run: flake8 {files}
+    include: "*.py"
+
+shortcuts:
+  lint:
+    flags:
+      - include-unstaged
+      - include-untracked
+  "lint:all":
+    extends: lint
+    flags: use-tracked-files
+  fix:
+    extends: lint
+    flags: fix
+  "fix:all":
+    extends: fix
+    flags: use-tracked-files
