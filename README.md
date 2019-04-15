@@ -3,8 +3,8 @@ sort-requirements
 
 A simple script to sort python dependencies in requirement text files.
 
-![PyPI](https://img.shields.io/pypi/v/sort_requirements.svg)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/sort_requirements.svg)
+![PyPI](https://img.shields.io/pypi/v/sort-requirements.svg)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/sort-requirements.svg)
 
 [![CircleCI](https://img.shields.io/circleci/project/github/rehandalal/sort-requirements.svg)](https://circleci.com/gh/rehandalal/sort-requirements)
 
@@ -19,7 +19,7 @@ $ pip install sort_requirements
 ```
 
 This command will download the latest version from the
-[Python Package Index](https://pypi.python.org/pypi/sort_requirements)
+[Python Package Index](https://pypi.org/project/sort-requirements/)
 and install it to your system. More information about `pip` and pypi can be
 found here:
 
