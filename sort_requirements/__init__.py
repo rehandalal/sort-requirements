@@ -1,7 +1,7 @@
 import re
 
 
-VERSION = (1, 0, 0)
+VERSION = (1, 1, 0)
 DEPS_RE = r"(.+?)==([^\\\n]+)((?:\\\n[^\\\n]+)*)"
 
 
