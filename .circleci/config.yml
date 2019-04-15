@@ -1,5 +1,37 @@
 version: 2
 jobs:
+  lint:
+    docker:
+      - image: circleci/python3.6
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: v1-python-{{ .Environment.CIRCLE_JOB }}
+
+      - run:
+          name: Create virtualenv
+          command: |
+            mkdir -p ~/.venv
+            virtualenv ~/.venv
+            echo "source ~/.venv/bin/activate" >> $BASH_ENV
+
+      - run:
+          name: Install dependencies
+          command: |
+            pip install therapist flake8 black
+            pip install .
+
+      - save_cache:
+          paths:
+            - "~/.venv"
+          key: v1-python-{{ .Environment.CIRCLE_JOB }}
+
+      - run:
+          name: Lint
+          command: therapist run --use-tracked-files
+
   test: &test-defaults
     docker:
       - image: circleci/python:2.7
@@ -20,17 +52,13 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            pip install therapist black flake8 pytest
+            pip install pytest
             pip install .
 
       - save_cache:
           paths:
             - "~/.venv"
           key: v1-python-{{ .Environment.CIRCLE_JOB }}
-
-      - run:
-          name: Lint
-          command: therapist run --use-tracked-files
 
       - run:
           name: Test
@@ -112,6 +140,10 @@ workflows:
   version: 2
   test_and_deploy:
     jobs:
+      - lint:
+          filters:
+            tags:
+              only: /^v.*/
       - test-py27:
           filters:
             tags:
@@ -134,6 +166,7 @@ workflows:
               only: /^v.*/
       - deploy:
           requires:
+            - lint
             - test-py27
             - test-py34
             - test-py35
