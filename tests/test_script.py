@@ -43,7 +43,7 @@ def cli():
 
 
 class TestScript(object):
-    def test_no_options(self, cli):
+    def test_no_arguments(self, cli):
         cmd = cli()
         assert cmd.returncode > 0
         assert len(cmd.stderr.decode()) > 0
