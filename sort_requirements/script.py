@@ -11,7 +11,13 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("files", nargs="+")
     parser.add_argument(
-        "-c", "--check", action="store_true", help="Only check files for issues."
+        "-c",
+        "--check",
+        action="store_true",
+        help=(
+            "Don't write the files back, just return a list of files that would change. Return "
+            "code 0 means nothing would change. Return code 1 means some files would be changed."
+        ),
     )
 
     args = parser.parse_args()
