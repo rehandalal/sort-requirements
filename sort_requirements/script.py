@@ -18,7 +18,7 @@ def end(code, args, changed, total):
         else:
             write = sys.stdout.write
 
-        write("All done! 🎉\n")
+        write(u"All done! 🎉\n")
 
         if changed:
             write(

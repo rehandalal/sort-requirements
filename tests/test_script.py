@@ -48,18 +48,16 @@ class TestScript(object):
     def test_no_arguments(self, cli):
         cmd = cli()
         assert cmd.returncode > 0
-        assert len(cmd.stderr.decode()) > 0
+        assert len(cmd.stderr.decode("utf8")) > 0
 
     def test_single_file(self, cli, tmp_path):
         tfp = os.path.join(tmp_path.as_posix(), "simple.txt")
         shutil.copy(os.path.join(FIXTURES_DIR, "simple.txt"), tfp)
 
         cmd = cli(tfp)
+        output = cmd.stdout.decode("utf8")
 
-        assert (
-            cmd.stdout.decode()
-            == "All done! 🎉\n1 file(s) changed, 0 file(s) unchanged.\n"
-        )
+        assert output == u"All done! 🎉\n1 file(s) changed, 0 file(s) unchanged.\n"
 
         with open(tfp, "r") as f:
             result = f.read()
@@ -73,7 +71,7 @@ class TestScript(object):
 
         cmd = cli(tfp, quiet=True)
 
-        assert cmd.stdout.decode() == ""
+        assert cmd.stdout.decode("utf8") == ""
 
         with open(tfp, "r") as f:
             result = f.read()
@@ -112,7 +110,7 @@ class TestScript(object):
         cmd = cli(tfp, check=True)
 
         assert cmd.returncode == 0
-        assert cmd.stdout.decode() == "All done! 🎉\n1 file(s) unchanged.\n"
+        assert cmd.stdout.decode("utf8") == "All done! 🎉\n1 file(s) unchanged.\n"
 
     def test_check_single_file(self, cli, tmp_path):
         tfp = os.path.join(tmp_path.as_posix(), "simple.txt")
@@ -123,9 +121,9 @@ class TestScript(object):
         pattern = r"Some files need sorting:\n- .+?simple\.txt\n"
 
         assert cmd.returncode == 1
-        assert re.match(pattern, cmd.stderr.decode()) is not None
-        assert cmd.stderr.decode().endswith(
-            "All done! 🎉\n1 file(s) changed, 0 file(s) unchanged.\n"
+        assert re.match(pattern, cmd.stderr.decode("utf8")) is not None
+        assert cmd.stderr.decode("utf8").endswith(
+            u"All done! 🎉\n1 file(s) changed, 0 file(s) unchanged.\n"
         )
 
         # Ensure the file is unchanged
@@ -142,7 +140,7 @@ class TestScript(object):
         cmd = cli(tfp, check=True, quiet=True)
 
         assert cmd.returncode == 1
-        assert cmd.stderr.decode() == ""
+        assert cmd.stderr.decode("utf8") == ""
 
         # Ensure the file is unchanged
         with open(tfp, "r") as f:
@@ -162,9 +160,9 @@ class TestScript(object):
         pattern = r"Some files need sorting:\n- .+?simple\.txt\n- .+?complex\.txt\n"
 
         assert cmd.returncode == 1
-        assert re.match(pattern, cmd.stderr.decode()) is not None
-        assert cmd.stderr.decode().endswith(
-            "All done! 🎉\n2 file(s) changed, 0 file(s) unchanged.\n"
+        assert re.match(pattern, cmd.stderr.decode("utf8")) is not None
+        assert cmd.stderr.decode("utf8").endswith(
+            u"All done! 🎉\n2 file(s) changed, 0 file(s) unchanged.\n"
         )
 
         # Ensure the files are unchanged
@@ -190,9 +188,9 @@ class TestScript(object):
             diff = f.read().format(os.path.relpath(tfp), os.path.relpath(tfp))
 
         assert cmd.returncode == 1
-        assert cmd.stderr.decode().startswith(diff)
-        assert cmd.stderr.decode().endswith(
-            "All done! 🎉\n1 file(s) changed, 0 file(s) unchanged.\n"
+        assert cmd.stderr.decode("utf8").startswith(diff)
+        assert cmd.stderr.decode("utf8").endswith(
+            u"All done! 🎉\n1 file(s) changed, 0 file(s) unchanged.\n"
         )
 
         # Ensure the file is unchanged
