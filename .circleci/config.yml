@@ -52,7 +52,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            pip install pytest
+            pip install -U pytest
             pip install .
 
       - save_cache:
@@ -62,7 +62,7 @@ jobs:
 
       - run:
           name: Test
-          command: py.test -vv
+          command: py.test -vvv
 
   test-py27:
     <<: *test-defaults

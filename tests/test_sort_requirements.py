@@ -2,8 +2,7 @@ import os
 
 from sort_requirements import sort_requirements
 
-
-FIXTURES_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), "fixtures")
+from . import FIXTURES_DIR
 
 
 class TestSortRequirements(object):
