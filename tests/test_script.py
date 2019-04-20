@@ -49,7 +49,7 @@ class TestScript(object):
         assert "the following arguments are required: files" in cmd.stderr.decode()
 
     def test_single_file(self, cli, tmp_path):
-        tfp = os.path.join(tmp_path, "simple.txt")
+        tfp = os.path.join(tmp_path.as_posix(), "simple.txt")
         shutil.copy(os.path.join(FIXTURES_DIR, "simple.txt"), tfp)
 
         cli(tfp)
@@ -63,8 +63,8 @@ class TestScript(object):
         assert result == expected
 
     def test_multiple_files(self, cli, tmp_path):
-        tfp1 = os.path.join(tmp_path, "simple.txt")
-        tfp2 = os.path.join(tmp_path, "complex.txt")
+        tfp1 = os.path.join(tmp_path.as_posix(), "simple.txt")
+        tfp2 = os.path.join(tmp_path.as_posix(), "complex.txt")
         shutil.copy(os.path.join(FIXTURES_DIR, "simple.txt"), tfp1)
         shutil.copy(os.path.join(FIXTURES_DIR, "complex.txt"), tfp2)
 
@@ -87,7 +87,7 @@ class TestScript(object):
         assert result == expected
 
     def test_check_no_issues(self, cli, tmp_path):
-        tfp = os.path.join(tmp_path, "simple.txt")
+        tfp = os.path.join(tmp_path.as_posix(), "simple.txt")
         shutil.copy(os.path.join(FIXTURES_DIR, "simple-sorted.txt"), tfp)
 
         cmd = cli(tfp, check=True)
@@ -96,7 +96,7 @@ class TestScript(object):
         assert cmd.stdout.decode() == ""
 
     def test_check_single_file(self, cli, tmp_path):
-        tfp = os.path.join(tmp_path, "simple.txt")
+        tfp = os.path.join(tmp_path.as_posix(), "simple.txt")
         shutil.copy(os.path.join(FIXTURES_DIR, "simple.txt"), tfp)
 
         cmd = cli(tfp, check=True)
@@ -107,8 +107,8 @@ class TestScript(object):
         assert re.match(pattern, cmd.stdout.decode()) is not None
 
     def test_check_multiple_files(self, cli, tmp_path):
-        tfp1 = os.path.join(tmp_path, "simple.txt")
-        tfp2 = os.path.join(tmp_path, "complex.txt")
+        tfp1 = os.path.join(tmp_path.as_posix(), "simple.txt")
+        tfp2 = os.path.join(tmp_path.as_posix(), "complex.txt")
         shutil.copy(os.path.join(FIXTURES_DIR, "simple.txt"), tfp1)
         shutil.copy(os.path.join(FIXTURES_DIR, "complex.txt"), tfp2)
 
