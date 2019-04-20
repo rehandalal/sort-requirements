@@ -68,3 +68,9 @@ writing any changes to the files, use the `--check` flag:
 ```
 $ sort-requirements --check my-requirements-file.txt another-file.txt
 ```
+
+For even more options use the `--help` flag:
+
+```
+$ sort-requirements --help
+```

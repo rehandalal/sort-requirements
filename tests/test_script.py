@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import os
 import re
 import shutil
@@ -52,14 +54,31 @@ class TestScript(object):
         tfp = os.path.join(tmp_path.as_posix(), "simple.txt")
         shutil.copy(os.path.join(FIXTURES_DIR, "simple.txt"), tfp)
 
-        cli(tfp)
+        cmd = cli(tfp)
+
+        assert (
+            cmd.stdout.decode()
+            == "All done! 🎉\n1 file(s) changed, 0 file(s) unchanged.\n"
+        )
 
         with open(tfp, "r") as f:
             result = f.read()
-
         with open(os.path.join(FIXTURES_DIR, "simple-sorted.txt"), "r") as f:
             expected = f.read()
+        assert result == expected
 
+    def test_single_file_quiet(self, cli, tmp_path):
+        tfp = os.path.join(tmp_path.as_posix(), "simple.txt")
+        shutil.copy(os.path.join(FIXTURES_DIR, "simple.txt"), tfp)
+
+        cmd = cli(tfp, quiet=True)
+
+        assert cmd.stdout.decode() == ""
+
+        with open(tfp, "r") as f:
+            result = f.read()
+        with open(os.path.join(FIXTURES_DIR, "simple-sorted.txt"), "r") as f:
+            expected = f.read()
         assert result == expected
 
     def test_multiple_files(self, cli, tmp_path):
@@ -93,7 +112,7 @@ class TestScript(object):
         cmd = cli(tfp, check=True)
 
         assert cmd.returncode == 0
-        assert cmd.stdout.decode() == ""
+        assert cmd.stdout.decode() == "All done! 🎉\n1 file(s) unchanged.\n"
 
     def test_check_single_file(self, cli, tmp_path):
         tfp = os.path.join(tmp_path.as_posix(), "simple.txt")
@@ -101,10 +120,36 @@ class TestScript(object):
 
         cmd = cli(tfp, check=True)
 
-        pattern = r"Some files need sorting:\n- .+?simple\.txt\n$"
+        pattern = r"Some files need sorting:\n- .+?simple\.txt\n"
 
         assert cmd.returncode == 1
-        assert re.match(pattern, cmd.stdout.decode()) is not None
+        assert re.match(pattern, cmd.stderr.decode()) is not None
+        assert cmd.stderr.decode().endswith(
+            "All done! 🎉\n1 file(s) changed, 0 file(s) unchanged.\n"
+        )
+
+        # Ensure the file is unchanged
+        with open(tfp, "r") as f:
+            result = f.read()
+        with open(os.path.join(FIXTURES_DIR, "simple.txt"), "r") as f:
+            expected = f.read()
+        assert result == expected
+
+    def test_check_single_file_quiet(self, cli, tmp_path):
+        tfp = os.path.join(tmp_path.as_posix(), "simple.txt")
+        shutil.copy(os.path.join(FIXTURES_DIR, "simple.txt"), tfp)
+
+        cmd = cli(tfp, check=True, quiet=True)
+
+        assert cmd.returncode == 1
+        assert cmd.stderr.decode() == ""
+
+        # Ensure the file is unchanged
+        with open(tfp, "r") as f:
+            result = f.read()
+        with open(os.path.join(FIXTURES_DIR, "simple.txt"), "r") as f:
+            expected = f.read()
+        assert result == expected
 
     def test_check_multiple_files(self, cli, tmp_path):
         tfp1 = os.path.join(tmp_path.as_posix(), "simple.txt")
@@ -114,7 +159,45 @@ class TestScript(object):
 
         cmd = cli(tfp1, tfp2, check=True)
 
-        pattern = r"Some files need sorting:\n- .+?simple\.txt\n- .+?complex\.txt\n$"
+        pattern = r"Some files need sorting:\n- .+?simple\.txt\n- .+?complex\.txt\n"
 
         assert cmd.returncode == 1
-        assert re.match(pattern, cmd.stdout.decode()) is not None
+        assert re.match(pattern, cmd.stderr.decode()) is not None
+        assert cmd.stderr.decode().endswith(
+            "All done! 🎉\n2 file(s) changed, 0 file(s) unchanged.\n"
+        )
+
+        # Ensure the files are unchanged
+        with open(tfp1, "r") as f:
+            result = f.read()
+        with open(os.path.join(FIXTURES_DIR, "simple.txt"), "r") as f:
+            expected = f.read()
+        assert result == expected
+
+        with open(tfp2, "r") as f:
+            result = f.read()
+        with open(os.path.join(FIXTURES_DIR, "complex.txt"), "r") as f:
+            expected = f.read()
+        assert result == expected
+
+    def test_diff_single_file(self, cli, tmp_path):
+        tfp = os.path.join(tmp_path.as_posix(), "simple.txt")
+        shutil.copy(os.path.join(FIXTURES_DIR, "simple.txt"), tfp)
+
+        cmd = cli(tfp, diff=True)
+
+        with open(os.path.join(FIXTURES_DIR, "simple-diff.txt"), "r") as f:
+            diff = f.read().format(os.path.relpath(tfp), os.path.relpath(tfp))
+
+        assert cmd.returncode == 1
+        assert cmd.stderr.decode().startswith(diff)
+        assert cmd.stderr.decode().endswith(
+            "All done! 🎉\n1 file(s) changed, 0 file(s) unchanged.\n"
+        )
+
+        # Ensure the file is unchanged
+        with open(tfp, "r") as f:
+            result = f.read()
+        with open(os.path.join(FIXTURES_DIR, "simple.txt"), "r") as f:
+            expected = f.read()
+        assert result == expected
