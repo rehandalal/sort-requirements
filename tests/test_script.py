@@ -110,7 +110,7 @@ class TestScript(object):
         cmd = cli(tfp, check=True)
 
         assert cmd.returncode == 0
-        assert cmd.stdout.decode("utf8") == "All done! 🎉\n1 file(s) unchanged.\n"
+        assert cmd.stdout.decode("utf8") == u"All done! 🎉\n1 file(s) unchanged.\n"
 
     def test_check_single_file(self, cli, tmp_path):
         tfp = os.path.join(tmp_path.as_posix(), "simple.txt")
@@ -183,13 +183,14 @@ class TestScript(object):
         shutil.copy(os.path.join(FIXTURES_DIR, "simple.txt"), tfp)
 
         cmd = cli(tfp, diff=True)
+        output = cmd.stderr.decode("utf8")
 
         with open(os.path.join(FIXTURES_DIR, "simple-diff.txt"), "r") as f:
             diff = f.read().format(os.path.relpath(tfp), os.path.relpath(tfp))
 
         assert cmd.returncode == 1
-        assert cmd.stderr.decode("utf8").startswith(diff)
-        assert cmd.stderr.decode("utf8").endswith(
+        assert output.startswith(diff)
+        assert output.endswith(
             u"All done! 🎉\n1 file(s) changed, 0 file(s) unchanged.\n"
         )
 

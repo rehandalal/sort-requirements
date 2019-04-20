@@ -18,7 +18,7 @@ def end(code, args, changed, total):
         else:
             write = sys.stdout.write
 
-        write(u"All done! 🎉\n")
+        write("All done! 🎉\n")
 
         if changed:
             write(
@@ -77,8 +77,8 @@ def main():
             if args.diff:
                 sys.stderr.writelines(
                     difflib.unified_diff(
-                        original.splitlines(keepends=True),
-                        modified.splitlines(keepends=True),
+                        original.splitlines(True),
+                        modified.splitlines(True),
                         fromfile=os.path.relpath(path),
                         tofile=os.path.relpath(path),
                     )
