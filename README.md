@@ -61,3 +61,10 @@ $ sort-requirements my-requirements-file.txt
 
 Please make sure to replace `my-requirements-file.txt` with the path to your
 requirements file(s).
+
+If you only want to get a list of files that need sorting, without actually
+writing any changes to the files, use the `--check` flag:
+
+```
+$ sort-requirements --check my-requirements-file.txt another-file.txt
+```
