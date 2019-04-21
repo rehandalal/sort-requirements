@@ -37,6 +37,7 @@ setup(
     author_email="rehan@meet-rehan.com",
     description="A simple script to sort python dependencies in requirement text files.",
     long_description=long_description,
+    long_description_content_type="text/markdown",
     packages=find_packages(exclude=["tests"]),
     include_package_data=True,
     zip_safe=False,
