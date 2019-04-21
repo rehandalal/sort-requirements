@@ -3,8 +3,8 @@ sort-requirements
 
 A simple script to sort python dependencies in requirement text files.
 
-![PyPI](https://img.shields.io/pypi/v/sort-requirements.svg)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/sort-requirements.svg)
+[![PyPI](https://img.shields.io/pypi/v/sort-requirements.svg)](https://pypi.org/project/sort-requirements/)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/sort-requirements.svg)](https://pypi.org/project/sort-requirements/)
 
 [![CircleCI](https://img.shields.io/circleci/project/github/rehandalal/sort-requirements.svg)](https://circleci.com/gh/rehandalal/sort-requirements)
 
