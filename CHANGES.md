@@ -1,5 +1,10 @@
 # Changelog
 
+### v1.3.0
+
+- Add support for non-equal comparators (`!=`, `>=`, `~=`).
+- Add support for non-inline comments.
+
 ### v1.2.0
 
 - Adds a results line after running.
