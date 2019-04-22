@@ -89,12 +89,55 @@ jobs:
     docker:
       - image: circleci/python:3.7
 
+  build-py2:
+    docker:
+      - image: circleci/python:2.7
+
+    working_directory: ~/build
+
+    steps:
+      - checkout
+
+      - run:
+          name: Create distributions
+          command: python setup.py bdist_wheel
+
+      - persist_to_workspace:
+          root: ~/build
+          paths:
+            - dist
+
+  build-py3:
+    docker:
+      - image: circleci/python:3.6
+
+    working_directory: ~/build
+
+    steps:
+      - checkout
+
+      - run:
+          name: Create distributions
+          command: |
+            python setup.py sdist
+            python setup.py bdist_wheel
+
+      - persist_to_workspace:
+          root: ~/build
+          paths:
+            - dist
+
   deploy:
     docker:
       - image: circleci/python:3.6
 
+    working_directory:  ~/deploy
+
     steps:
       - checkout
+
+      - attach_workspace:
+          at: ~/deploy
 
       - restore_cache:
           key: v1-python-{{ .Environment.CIRCLE_JOB }}
@@ -127,51 +170,58 @@ jobs:
             echo -e "password = $PYPI_PASSWORD" >> ~/.pypirc
 
       - run:
-          name: Create distributions
-          command: |
-            python setup.py sdist
-            python setup.py bdist_wheel
-
-      - run:
           name: Upload to PyPI
           command: twine upload dist/*
 
 workflows:
   version: 2
-  test_and_deploy:
+  test-build-deploy:
     jobs:
       - lint:
           filters:
             tags:
-              only: /^v.*/
+              only: /.*/
       - test-py27:
           filters:
             tags:
-              only: /^v.*/
+              only: /.*/
       - test-py34:
           filters:
             tags:
-              only: /^v.*/
+              only: /.*/
       - test-py35:
           filters:
             tags:
-              only: /^v.*/
+              only: /.*/
       - test-py36:
           filters:
             tags:
-              only: /^v.*/
+              only: /.*/
       - test-py37:
           filters:
             tags:
-              only: /^v.*/
-      - deploy:
+              only: /.*/
+      - build-py2:
           requires:
             - lint
             - test-py27
+          filters:
+            tags:
+              only: /.*/
+      - build-py3:
+          requires:
+            - lint
             - test-py34
             - test-py35
             - test-py36
             - test-py37
+          filters:
+            tags:
+              only: /.*/
+      - deploy:
+          requires:
+            - build-py2
+            - build-py3
           filters:
             branches:
               ignore: /.*/
