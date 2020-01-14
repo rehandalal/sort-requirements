@@ -15,7 +15,7 @@ Installing this tool is easily done using [pip](https://github.com/pypa/pip).
 Assuming `pip` is installed just run the following from the command line:
 
 ```
-$ pip install sort_requirements
+$ pip install sort-requirements
 ```
 
 This command will download the latest version from the
