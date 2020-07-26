@@ -38,11 +38,11 @@ You could also install the
 by running the following:
 
 ```
-$ pip install therapist==dev
+$ pip install sort-requirements==dev
 ```
 
 Or simple install from a clone of the 
-[git repo](https://github.com/rehandalal/therapist/):
+[git repo](https://github.com/rehandalal/sort-requirements/):
 
 ```
 $ git clone https://github.com/rehandalal/sort-requirements.git
