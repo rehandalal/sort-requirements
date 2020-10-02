@@ -2,7 +2,7 @@ version: 2
 jobs:
   lint:
     docker:
-      - image: circleci/python:3.6
+      - image: circleci/python:3.8
 
     steps:
       - checkout
@@ -89,6 +89,11 @@ jobs:
     docker:
       - image: circleci/python:3.7
 
+  test-py38:
+    <<: *test-defaults
+    docker:
+      - image: circleci/python:3.8
+
   build-py2:
     docker:
       - image: circleci/python:2.7
@@ -109,7 +114,7 @@ jobs:
 
   build-py3:
     docker:
-      - image: circleci/python:3.6
+      - image: circleci/python:3.8
 
     working_directory: ~/build
 
@@ -129,7 +134,7 @@ jobs:
 
   deploy:
     docker:
-      - image: circleci/python:3.6
+      - image: circleci/python:3.8
 
     working_directory:  ~/deploy
 
@@ -201,6 +206,10 @@ workflows:
           filters:
             tags:
               only: /.*/
+      - test-py38:
+          filters:
+            tags:
+              only: /.*/
       - build-py2:
           requires:
             - lint
@@ -215,6 +224,7 @@ workflows:
             - test-py35
             - test-py36
             - test-py37
+            - test-py38
           filters:
             tags:
               only: /.*/
