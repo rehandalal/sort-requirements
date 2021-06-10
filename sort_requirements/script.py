@@ -69,8 +69,8 @@ def main():
     for path in files:
         with open(path, "r") as f:
             original = f.read()
-            modified = sort_requirements(original)
-            modified = "\n".join(set(modified.split("\n")))
+            deduplicated = "\n".join(set(original.split("\n")))
+            modified = sort_requirements(deduplicated)
 
         if original != modified:
             changed += 1
