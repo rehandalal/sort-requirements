@@ -70,6 +70,7 @@ def main():
         with open(path, "r") as f:
             original = f.read()
             modified = sort_requirements(original)
+            modified = "\n".join(set(modified.split("\n")))
 
         if original != modified:
             changed += 1
