@@ -29,3 +29,11 @@ class TestSortRequirements(object):
             expected = f.read()
         txt = sort_requirements(txt)
         assert txt == expected
+
+    def test_duplicates_file(self):
+        with open(os.path.join(FIXTURES_DIR, "duplicates.txt"), "r") as f:
+            txt = f.read()
+        with open(os.path.join(FIXTURES_DIR, "simple-sorted.txt"), "r") as f:
+            expected = f.read()
+        txt = sort_requirements(txt, remove_duplicates=True)
+        assert txt == expected
