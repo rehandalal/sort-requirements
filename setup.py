@@ -1,5 +1,6 @@
 import os
 import sys
+import re
 
 from setuptools import find_packages, setup
 from setuptools.command.install import install
@@ -7,7 +8,15 @@ from setuptools.command.install import install
 
 ROOT = os.path.abspath(os.path.dirname(__file__))
 
-version = __import__("sort_requirements").__version__
+# Read version from __init__.py
+version_file = os.path.join(ROOT, "sort_requirements", "__init__.py")
+with open(version_file, "r") as f:
+    version_match = re.search(r"^VERSION = \((.+?)\)", f.read(), re.MULTILINE)
+    if version_match:
+        version_tuple = tuple(map(int, version_match.group(1).split(", ")))
+        version = ".".join(str(v) for v in version_tuple)
+    else:
+        raise RuntimeError("Unable to find version string")
 
 with open("README.md", "r") as f:
     long_description = f.read()
@@ -43,7 +52,6 @@ setup(
     zip_safe=False,
     platforms="any",
     install_requires=[],
-    py_modules=["sort_requirements"],
     entry_points={
         "console_scripts": ["sort-requirements = sort_requirements.script:main"]
     },
@@ -57,11 +65,15 @@ setup(
         "Operating System :: Unix",
         "Programming Language :: Python",
         "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
         "Topic :: Software Development :: Build Tools",
     ],
     cmdclass={"verify": VerifyVersionCommand},

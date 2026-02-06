@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 
 import os
 import re
@@ -57,7 +58,7 @@ class TestScript(object):
         cmd = cli(tfp)
         output = cmd.stdout.decode("utf8")
 
-        assert output == u"All done! 🎉\n1 file(s) changed, 0 file(s) unchanged.\n"
+        assert output == "All done! 🎉\n1 file(s) changed, 0 file(s) unchanged.\n"
 
         with open(tfp, "r") as f:
             result = f.read()
@@ -110,7 +111,7 @@ class TestScript(object):
         cmd = cli(tfp, check=True)
 
         assert cmd.returncode == 0
-        assert cmd.stdout.decode("utf8") == u"All done! 🎉\n1 file(s) unchanged.\n"
+        assert cmd.stdout.decode("utf8") == "All done! 🎉\n1 file(s) unchanged.\n"
 
     def test_check_single_file(self, cli, tmp_path):
         tfp = os.path.join(tmp_path.as_posix(), "simple.txt")
@@ -123,7 +124,7 @@ class TestScript(object):
         assert cmd.returncode == 1
         assert re.match(pattern, cmd.stderr.decode("utf8")) is not None
         assert cmd.stderr.decode("utf8").endswith(
-            u"All done! 🎉\n1 file(s) changed, 0 file(s) unchanged.\n"
+            "All done! 🎉\n1 file(s) changed, 0 file(s) unchanged.\n"
         )
 
         # Ensure the file is unchanged
@@ -162,7 +163,7 @@ class TestScript(object):
         assert cmd.returncode == 1
         assert re.match(pattern, cmd.stderr.decode("utf8")) is not None
         assert cmd.stderr.decode("utf8").endswith(
-            u"All done! 🎉\n2 file(s) changed, 0 file(s) unchanged.\n"
+            "All done! 🎉\n2 file(s) changed, 0 file(s) unchanged.\n"
         )
 
         # Ensure the files are unchanged
@@ -191,7 +192,7 @@ class TestScript(object):
         assert cmd.returncode == 1
         assert output.startswith(diff)
         assert output.endswith(
-            u"All done! 🎉\n1 file(s) changed, 0 file(s) unchanged.\n"
+            "All done! 🎉\n1 file(s) changed, 0 file(s) unchanged.\n"
         )
 
         # Ensure the file is unchanged
