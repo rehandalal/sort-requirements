@@ -2,7 +2,7 @@ version: 2
 jobs:
   lint:
     docker:
-      - image: circleci/python:3.8
+      - image: cimg/python:3.8
 
     steps:
       - checkout
@@ -34,7 +34,7 @@ jobs:
 
   test: &test-defaults
     docker:
-      - image: circleci/python:2.7
+      - image: cimg/python:2.7
 
     steps:
       - checkout
@@ -67,36 +67,56 @@ jobs:
   test-py27:
     <<: *test-defaults
     docker:
-      - image: circleci/python:2.7
-
-  test-py34:
-    <<: *test-defaults
-    docker:
-      - image: circleci/python:3.4
+      - image: cimg/python:2.7
 
   test-py35:
     <<: *test-defaults
     docker:
-      - image: circleci/python:3.5
+      - image: cimg/python:3.5
 
   test-py36:
     <<: *test-defaults
     docker:
-      - image: circleci/python:3.6
+      - image: cimg/python:3.6
 
   test-py37:
     <<: *test-defaults
     docker:
-      - image: circleci/python:3.7
+      - image: cimg/python:3.7
 
   test-py38:
     <<: *test-defaults
     docker:
-      - image: circleci/python:3.8
+      - image: cimg/python:3.8
+
+  test-py39:
+    <<: *test-defaults
+    docker:
+      - image: cimg/python:3.9
+
+  test-py310:
+    <<: *test-defaults
+    docker:
+      - image: cimg/python:3.10
+
+  test-py311:
+    <<: *test-defaults
+    docker:
+      - image: cimg/python:3.11
+
+  test-py312:
+    <<: *test-defaults
+    docker:
+      - image: cimg/python:3.12
+
+  test-py313:
+    <<: *test-defaults
+    docker:
+      - image: cimg/python:3.13
 
   build-py2:
     docker:
-      - image: circleci/python:2.7
+      - image: cimg/python:2.7
 
     working_directory: ~/build
 
@@ -114,7 +134,7 @@ jobs:
 
   build-py3:
     docker:
-      - image: circleci/python:3.8
+      - image: cimg/python:3.8
 
     working_directory: ~/build
 
@@ -134,7 +154,7 @@ jobs:
 
   deploy:
     docker:
-      - image: circleci/python:3.8
+      - image: cimg/python:3.8
 
     working_directory:  ~/deploy
 
@@ -190,10 +210,6 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - test-py34:
-          filters:
-            tags:
-              only: /.*/
       - test-py35:
           filters:
             tags:
@@ -210,6 +226,26 @@ workflows:
           filters:
             tags:
               only: /.*/
+      - test-py39:
+          filters:
+            tags:
+              only: /.*/
+      - test-py310:
+          filters:
+            tags:
+              only: /.*/
+      - test-py311:
+          filters:
+            tags:
+              only: /.*/
+      - test-py312:
+          filters:
+            tags:
+              only: /.*/
+      - test-py313:
+          filters:
+            tags:
+              only: /.*/
       - build-py2:
           requires:
             - lint
@@ -220,14 +256,18 @@ workflows:
       - build-py3:
           requires:
             - lint
-            - test-py34
             - test-py35
             - test-py36
             - test-py37
             - test-py38
+            - test-py39
+            - test-py310
+            - test-py311
+            - test-py312
+            - test-py313
           filters:
-            tags:
-              only: /.*/
+              tags:
+                only: /.*/
       - deploy:
           requires:
             - build-py2

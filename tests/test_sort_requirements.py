@@ -29,3 +29,11 @@ class TestSortRequirements(object):
             expected = f.read()
         txt = sort_requirements(txt)
         assert txt == expected
+
+    def test_bare_file(self):
+        with open(os.path.join(FIXTURES_DIR, "bare.txt"), "r") as f:
+            txt = f.read()
+        with open(os.path.join(FIXTURES_DIR, "bare-sorted.txt"), "r") as f:
+            expected = f.read()
+        txt = sort_requirements(txt)
+        assert txt == expected
