@@ -84,7 +84,7 @@ def sort_requirements(requirements, deduplicate=True):
 
     sorted_dependencies = sorted(
         dependencies,
-        key=lambda dep: dep["name"].casefold(),
+        key=lambda dep: dep["name"].lower(),
     )
 
     if deduplicate:
