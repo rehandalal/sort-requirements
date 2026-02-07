@@ -11,7 +11,7 @@ DEPS_WITH_VERSION_RE = (
 __version__ = ".".join(str(v) for v in VERSION)
 
 
-def sort_requirements(requirements):
+def sort_requirements(requirements, deduplicate=True):
     # Handle packages with version specifiers (existing behavior)
     matches = re.findall(DEPS_WITH_VERSION_RE, requirements)
     data = re.sub(DEPS_WITH_VERSION_RE, "{}", requirements)
@@ -48,16 +48,26 @@ def sort_requirements(requirements):
             # Replace this line with a placeholder
             lines[i] = "|||"
 
-    # Combine and sort all packages together by package name
+    # Combine and sort all packages together by package name (deduplicate exact lines only when enabled)
     all_packages = []
+    seen = set() if deduplicate else None
 
     # Add versioned packages with their package names for sorting
     for m in matches:
-        package_name = m[1].lower().strip()
-        all_packages.append(("with_version", package_name, m))
+        if deduplicate:
+            line_content = "{}{}{}{}{}".format(*m)
+            if line_content in seen:
+                continue
+            seen.add(line_content)
+        all_packages.append(("with_version", m[1].lower().strip(), m))
 
     # Add non-versioned packages with their package names for sorting
     for comments, package_name in packages_no_version:
+        if deduplicate:
+            line_content = "{}{}".format(comments, package_name)
+            if line_content in seen:
+                continue
+            seen.add(line_content)
         package_name_lower = package_name.lower().strip()
         all_packages.append(
             ("no_version", package_name_lower, (comments, package_name))
