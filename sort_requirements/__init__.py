@@ -12,6 +12,8 @@ __version__ = ".".join(str(v) for v in VERSION)
 
 
 def sort_requirements(requirements, deduplicate=True):
+    had_trailing_newline = requirements.endswith("\n")
+
     # Handle packages with version specifiers (existing behavior)
     matches = re.findall(DEPS_WITH_VERSION_RE, requirements)
     data = re.sub(DEPS_WITH_VERSION_RE, "{}", requirements)
@@ -85,28 +87,18 @@ def sort_requirements(requirements, deduplicate=True):
             comments, package_name = pkg_data
             all_deps.append("{}{}".format(comments, package_name))
 
-    # Replace all placeholders with sorted packages
-    # Find all placeholder positions and replace them in order with sorted packages
-    data = "\n".join(lines)
-
-    # Replace all placeholders (both {} and |||) with sorted packages in order
+    # Replace placeholders line-by-line so removed duplicates don't leave blank lines.
     placeholder_idx = 0
-    result_parts = []
-    last_pos = 0
+    output_lines = []
+    for line in lines:
+        if line in ("{}", "|||"):
+            if placeholder_idx < len(all_deps):
+                output_lines.append(all_deps[placeholder_idx])
+                placeholder_idx += 1
+            continue
+        output_lines.append(line)
 
-    # Find all placeholder positions ({} or |||)
-    import re as re_module
-
-    for match in re_module.finditer(r"\{\}|\|\|\|", data):
-        # Add content before placeholder
-        result_parts.append(data[last_pos : match.start()])
-        # Add sorted package
-        if placeholder_idx < len(all_deps):
-            result_parts.append(all_deps[placeholder_idx])
-            placeholder_idx += 1
-        last_pos = match.end()
-
-    # Add remaining content
-    result_parts.append(data[last_pos:])
-
-    return "".join(result_parts)
+    result = "\n".join(output_lines)
+    if had_trailing_newline and not result.endswith("\n"):
+        result += "\n"
+    return result

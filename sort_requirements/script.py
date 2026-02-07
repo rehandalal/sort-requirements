@@ -61,6 +61,7 @@ def main():
     )
     parser.add_argument(
         "--skip-deduplication",
+        "--skip_deduplication",
         action="store_true",
         help="Do not remove duplicate requirement lines; only sort.",
     )
