@@ -1,7 +1,7 @@
 import re
 
 
-VERSION = (1, 3, 1)
+VERSION = (1, 3, 2)
 # Match packages with version specifiers: comments + package + version_spec + version + continuation
 DEPS_WITH_VERSION_RE = (
     r"((?:#[^\n]+?\n)*)([^\n]+?)([=!~>]=)([^\\\n]+)((?:\\\n[^\\\n]+)*)"

@@ -1,9 +1,13 @@
 # Changelog
 
+### v1.3.2
+
+- Add deduplication controls for requirement sorting, including CLI support for keeping duplicate lines.
+
 ### v1.3.1
 
 - Add support for Python 3.8 - 3.13
-- Fix sorting for requirements files with just a bare list of requirements with no versions
+- Fix sorting for requirements files with just a bare list of requirements with no versions.
 
 ### v1.3.0
 
