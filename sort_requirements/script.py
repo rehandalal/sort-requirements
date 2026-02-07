@@ -59,6 +59,12 @@ def main():
             "2>/dev/null."
         ),
     )
+    parser.add_argument(
+        "--skip-deduplication",
+        "--skip_deduplication",
+        action="store_true",
+        help="Do not remove duplicate requirement lines; only sort.",
+    )
 
     args = parser.parse_args()
 
@@ -69,7 +75,9 @@ def main():
     for path in files:
         with open(path, "r") as f:
             original = f.read()
-            modified = sort_requirements(original)
+            modified = sort_requirements(
+                original, deduplicate=not args.skip_deduplication
+            )
 
         if original != modified:
             changed += 1

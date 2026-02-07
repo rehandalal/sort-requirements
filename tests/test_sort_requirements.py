@@ -37,3 +37,19 @@ class TestSortRequirements(object):
             expected = f.read()
         txt = sort_requirements(txt)
         assert txt == expected
+
+    def test_deduplicate_file(self):
+        with open(os.path.join(FIXTURES_DIR, "duplicate.txt"), "r") as f:
+            txt = f.read()
+        with open(os.path.join(FIXTURES_DIR, "duplicate-sorted.txt"), "r") as f:
+            expected = f.read()
+        txt = sort_requirements(txt)
+        assert txt == expected
+
+    def test_skip_deduplication_keeps_exact_duplicates(self):
+        with open(os.path.join(FIXTURES_DIR, "duplicate-skip.txt"), "r") as f:
+            txt = f.read()
+        with open(os.path.join(FIXTURES_DIR, "duplicate-skip-sorted.txt"), "r") as f:
+            expected = f.read()
+        result = sort_requirements(txt, deduplicate=False)
+        assert result == expected

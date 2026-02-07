@@ -201,3 +201,21 @@ class TestScript(object):
         with open(os.path.join(FIXTURES_DIR, "simple.txt"), "r") as f:
             expected = f.read()
         assert result == expected
+
+    def test_skip_deduplication_keeps_duplicate_lines(self, cli, tmp_path):
+        tfp = os.path.join(tmp_path.as_posix(), "reqs.txt")
+        shutil.copy(os.path.join(FIXTURES_DIR, "duplicate-skip.txt"), tfp)
+
+        cmd = cli(tfp, skip_deduplication=True)
+        output = cmd.stdout.decode("utf8")
+
+        assert cmd.returncode == 0
+        assert output.endswith(
+            "All done! 🎉\n1 file(s) changed, 0 file(s) unchanged.\n"
+        )
+
+        with open(tfp, "r") as f:
+            result = f.read()
+        with open(os.path.join(FIXTURES_DIR, "duplicate-skip-sorted.txt"), "r") as f:
+            expected = f.read()
+        assert result == expected

@@ -1,0 +1,6 @@
+bottle==1.0
+apple~=0.2
+core~=3.1.1
+apple==0.3
+delta==2.0
+bottle==1.0
