@@ -74,7 +74,9 @@ def main():
     for path in files:
         with open(path, "r") as f:
             original = f.read()
-            modified = sort_requirements(original, deduplicate=not args.skip_deduplication)
+            modified = sort_requirements(
+                original, deduplicate=not args.skip_deduplication
+            )
 
         if original != modified:
             changed += 1

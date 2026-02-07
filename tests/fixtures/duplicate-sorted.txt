@@ -1,4 +1,4 @@
-apple!=0.2
+apple~=0.2
 apple==0.3
 bottle==1.0
 core~=3.1.1

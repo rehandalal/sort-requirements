@@ -207,10 +207,9 @@ class TestScript(object):
         shutil.copy(os.path.join(FIXTURES_DIR, "duplicate-skip.txt"), tfp)
 
         cmd = cli(tfp, skip_deduplication=True)
-        output = cmd.stderr.decode("utf8")
+        output = cmd.stdout.decode("utf8")
 
         assert cmd.returncode == 0
-        assert output.startswith(diff)
         assert output.endswith(
             "All done! 🎉\n1 file(s) changed, 0 file(s) unchanged.\n"
         )

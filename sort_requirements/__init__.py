@@ -48,7 +48,7 @@ def sort_requirements(requirements, deduplicate=True):
             # Replace this line with a placeholder
             lines[i] = "|||"
 
-    # Combine and sort all packages together by package name (deduplicate exact lines only when enabled)
+    # Combine and sort by package name (deduplicate exact lines only when enabled)
     all_packages = []
     seen = set() if deduplicate else None
 
