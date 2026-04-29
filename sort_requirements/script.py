@@ -80,8 +80,6 @@ def main():
             )
 
         if original != modified:
-            changed += 1
-
             if args.diff:
                 sys.stderr.writelines(
                     difflib.unified_diff(
@@ -96,6 +94,7 @@ def main():
             if args.check or args.diff:
                 failed.append(path)
             else:
+                changed += 1
                 with open(path, "w") as f:
                     f.write(modified)
 
