@@ -1,7 +1,7 @@
 import re
 
 
-VERSION = (1, 3, 2)
+VERSION = (1, 3, 3)
 DEPENDENCY_RE = re.compile(r"^([^\s!=~><#]+)\s*([=!~>]=)?\s*(.*)$")
 
 

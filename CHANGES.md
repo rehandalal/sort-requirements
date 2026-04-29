@@ -1,5 +1,9 @@
 # Changelog
 
+### v1.3.3
+
+- Fix a bug with counting changed files when `--check` is passed.
+
 ### v1.3.2
 
 - Add deduplication controls for requirement sorting, including CLI support for keeping duplicate lines.
