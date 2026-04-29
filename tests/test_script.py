@@ -124,7 +124,7 @@ class TestScript(object):
         assert cmd.returncode == 1
         assert re.match(pattern, cmd.stderr.decode("utf8")) is not None
         assert cmd.stderr.decode("utf8").endswith(
-            "All done! 🎉\n1 file(s) changed, 0 file(s) unchanged.\n"
+            "All done! 🎉\n1 file(s) unchanged.\n"
         )
 
         # Ensure the file is unchanged
@@ -163,7 +163,7 @@ class TestScript(object):
         assert cmd.returncode == 1
         assert re.match(pattern, cmd.stderr.decode("utf8")) is not None
         assert cmd.stderr.decode("utf8").endswith(
-            "All done! 🎉\n2 file(s) changed, 0 file(s) unchanged.\n"
+            "All done! 🎉\n2 file(s) unchanged.\n"
         )
 
         # Ensure the files are unchanged
@@ -191,9 +191,7 @@ class TestScript(object):
 
         assert cmd.returncode == 1
         assert output.startswith(diff)
-        assert output.endswith(
-            "All done! 🎉\n1 file(s) changed, 0 file(s) unchanged.\n"
-        )
+        assert output.endswith("All done! 🎉\n1 file(s) unchanged.\n")
 
         # Ensure the file is unchanged
         with open(tfp, "r") as f:
